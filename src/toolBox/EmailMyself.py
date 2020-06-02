@@ -25,7 +25,7 @@ class EmailBot(object):
             if key not in data_dict.keys():
                 data_dict[key] = self.settings[key]
         msg = MIMEMultipart('auto email')
-        msg.attach(MIMEText(data_dict['content'],_subtype='plain',_charset='utf-8'))
+        msg.attach(MIMEText(data_dict['content'],_subtype='html',_charset='utf-8'))
         msg['Subject'] = Header(data_dict['title'],'utf-8')
         msg['From'] = data_dict['From']
         # 添加发送人邮件信息（支持群发）
