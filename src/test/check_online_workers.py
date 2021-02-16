@@ -17,8 +17,6 @@ config_path_list = ["../data/pool1.json", "../data/pool2.json"]
 count = 0
 flag = 0
 while True:
-    time.sleep(1)
-    count += 1
     for config_path in config_path_list:
         config_dict = json.load(open(config_path))
         if count % config_dict["check_per_seconds"] == 0:
@@ -32,9 +30,11 @@ while True:
                     flag += 1
                     content = (
                         "pool for {type} has some bot offline pleace check".format(
-                            config_dict["type"]
+                            type=config_dict["type"]
                         )
                     )
                     emailbot.sendOne({"content": content})
     if flag >= 6:
         break
+    time.sleep(1)
+    count += 1
