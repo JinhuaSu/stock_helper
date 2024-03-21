@@ -19,7 +19,7 @@ def get_price_min_tx(code, end_date=None, count=10, frequency='1d'):    #分钟�
     if end_date: end_date=end_date.strftime('%Y-%m-%d') if isinstance(end_date,datetime.date) else end_date.split(' ')[0]        
     URL=f'http://ifzq.gtimg.cn/appstock/app/kline/mkline?param={code},m{ts},,{count}' 
     st= json.loads(requests.get(URL).content);
-    print(st)
+    # print(s)
     buf=st['data'][code]['m'+str(ts)] 
     df=pd.DataFrame(buf,columns=['time','open','close','high','low','volume','n1','n2'])   
     df=df[['time','open','close','high','low','volume']]    
