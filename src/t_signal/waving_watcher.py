@@ -3,10 +3,12 @@ import os
 import sys
 import numpy as np
 from sklearn.preprocessing import StandardScaler
+#%%
 
 sys.path.append("../")
 
 from toolBox.Ashare import *
+#%%
 scaler = StandardScaler()
 # 需要设置开始时间，比如自动在10点开始，过去半小时，基本上进入股市日内波动的周期中
 # 分析和提示目前有1m一次似乎就够用了，能有用才会提升到3s的接口，这个就要花钱了
