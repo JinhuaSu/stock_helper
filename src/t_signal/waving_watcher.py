@@ -20,8 +20,8 @@ df_stock['close_std'] = scaler.fit_transform(df_stock[['close']])
 # 计算前后两分钟的价格变化百分比
 df_stock['pct_change'] = df_stock['close'].pct_change()
 
-# 设定涨跌区间阈值
-threshold = 0.01 / 11  # 1%
+# 设定涨跌区间阈值(有些许问题，涨0.01其实已经算长了，但是除以一个过小的基数会导致要求涨两个点)
+threshold = 0.01 / 10  # 1%
 
 # 标记涨跌区间
 conditions = [
@@ -52,6 +52,7 @@ def count_trend(trend_series, trend_value):
 def calculate_signal(trend_series):
     # trend_series.index = range(len(trend_series))
     # print(trend_series[-3:])
+    # 这个方案可能导致一两分钟内信号反复出现，即信号出现的前三分钟不能有信号出现才发邮箱
     if trend_series[-3:].sum() == 3:
         return 1
     elif(trend_series[-1] == -1 and (trend_series[-7:] == -1).sum() == 4) :
@@ -113,7 +114,8 @@ for i in range(1, len(merged_df)):
 merged_df.to_csv("../../data/merge.csv")
 # if merged_df.loc[merged_df.index[-1], "trend"]
 # %%
-if merged_df.loc[merged_df.index[-1], "temp_signal"] != 0:
+# 信号出现的前三分钟不能有信号出现才发邮箱
+if merged_df.loc[merged_df.index[-1], "temp_signal"] != 0 and merged_df.loc[merged_df.index[-2], "temp_signal"] == 0 and merged_df.loc[merged_df.index[-3], "temp_signal"] == 0:
     from toolBox import EmailBot
     content_str = "即将达到顶峰，建议卖出" if merged_df.loc[merged_df.index[-1], "temp_signal"] > 0  else "即将达到谷底，建议买入" + " 当前价位"+ str(merged_df.loc[merged_df.index[-1], "close_stock"])
     emailbot = EmailBot('../../data/settings.json')
