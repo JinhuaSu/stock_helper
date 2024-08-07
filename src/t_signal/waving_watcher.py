@@ -113,5 +113,8 @@ merged_df.to_csv("../../data/merge.csv")
 # %%
 if merged_df.loc[merged_df.index[-1], "temp_signal"] != 0:
     from toolBox import EmailBot
+    content_str = "即将达到顶峰，建议卖出" if merged_df.loc[merged_df.index[-1], "temp_signal"] > 0  else "即将达到谷底，建议买入" + " 当前价位"+ str(merged_df.loc[merged_df.index[-1], "close_stock"])
     emailbot = EmailBot('../../data/settings.json')
-    emailbot.sendOne({"content":str(merged_df.loc[merged_df.index[-1], "temp_signal"])+ " "+ str(merged_df.loc[merged_df.index[-1], "close_stock"])})
+    emailbot.sendOne({"content": content_str})
+    emailbot2 = EmailBot('../../data/settings2.json')
+    emailbot2.sendOne({"content": content_str})
