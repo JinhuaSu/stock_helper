@@ -21,7 +21,7 @@ df_stock['close_std'] = scaler.fit_transform(df_stock[['close']])
 df_stock['pct_change'] = df_stock['close'].pct_change()
 
 # 设定涨跌区间阈值(有些许问题，涨0.01其实已经算长了，但是除以一个过小的基数会导致要求涨两个点)
-threshold = 0.01 / 10  # 1%
+threshold = 0.01 / 12  # 1%
 
 # 标记涨跌区间
 conditions = [
